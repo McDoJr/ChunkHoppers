@@ -1,0 +1,20 @@
+name: ChunkHoppers
+version: 2.1.5
+main: com.kbejj.chunkhoppers.ChunkHoppers
+api-version: 1.15
+authors: [ McDoJr ]
+description: Cool and easy to use chunk hopper plugin
+softdepend:
+  - Vault
+  - ShopGUIPlus
+  - WorldEdit
+  - FastAsyncWorldEdit
+  - WorldGuard
+  - Multiverse-Core
+  - FabledSkyBlock
+  - ASkyBlock
+  - IridiumSkyBlock
+commands:
+  chunkhopper:
+    description: Base command
+    aliases: [chopper, ch]
