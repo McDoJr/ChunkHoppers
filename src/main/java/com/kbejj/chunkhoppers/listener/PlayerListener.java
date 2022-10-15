@@ -81,7 +81,7 @@ public class PlayerListener implements Listener {
                 }
                 chunkHopper.addFilteredItem(itemStack);
             }
-            chunkHopper.reload();
+            chunkHopper.updatePersistentValue();
             StringUtil.sendMessage(player, ConfigValues.getMessage("filtered-message"));
         }
     }
