@@ -2,7 +2,6 @@ package com.kbejj.chunkhoppers.base;
 
 import com.kbejj.chunkhoppers.ChunkHoppers;
 import com.kbejj.chunkhoppers.utils.ConfigValues;
-import com.kbejj.chunkhoppers.utils.DataUtil;
 import com.kbejj.chunkhoppers.utils.StringUtil;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
@@ -24,7 +23,7 @@ public class ChunkHopperManager {
 
     public static void removeChunkHopper(Location location){
         ChunkHopper chunkHopper = getChunkHopper(location);
-        if(chunkHopper.getTotalEarnings() > 0 && DataUtil.hasShopGuiPlus()){
+        if(chunkHopper.getTotalEarnings() > 0){
             OfflinePlayer offlinePlayer = chunkHopper.getOfflinePlayer();
             if(offlinePlayer.isOnline()){
                 plugin.getEconomy().depositPlayer(offlinePlayer, chunkHopper.getTotalEarnings());
