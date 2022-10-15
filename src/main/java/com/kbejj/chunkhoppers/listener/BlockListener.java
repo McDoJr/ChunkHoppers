@@ -47,9 +47,16 @@ public class BlockListener implements Listener {
             EffectUtil.playSound(location, Sound.ENTITY_VILLAGER_NO);
             return;
         }
-        if(ChunkHopperUtil.getTotalChunkHoppers(player) >= DataUtil.getPlayerPermissionChunkHopperLimit(player)){
+        int totalChunkHoppers = ChunkHopperUtil.getTotalChunkHoppers(player);
+        if(totalChunkHoppers >= DataUtil.getPlayerPermissionChunkHopperLimit(player)){
             e.setCancelled(true);
             StringUtil.sendMessage(player, ConfigValues.getMessage("limit-message"));
+            EffectUtil.playSound(location, Sound.ENTITY_VILLAGER_NO);
+            return;
+        }
+        if(!player.isOp() && totalChunkHoppers >= ConfigValues.getHopperLimit()){
+            e.setCancelled(true);
+            StringUtil.sendMessage(player, "&cYou have reached the server chunk hopper limit of 20");
             EffectUtil.playSound(location, Sound.ENTITY_VILLAGER_NO);
             return;
         }
