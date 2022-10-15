@@ -40,31 +40,32 @@ public class ChunkHopper {
 
     public void collectGroundItems(){
         Chunk chunk = location.getChunk();
-        if(chunk.isLoaded()){
-            ChunkHopperUtil.autoKillMobs(chunk, this);
-            for(Item item : ChunkHopperUtil.getGroundItems(chunk, filteredItems)){
-                Block block = location.getBlock();
-                if(!block.getType().equals(Material.HOPPER)){
-                    ChunkHopperManager.removeChunkHopper(location);
-                    break;
-                }
-                Hopper hopper = (Hopper) block.getState();
-                Inventory inventory = hopper.getInventory();
-                if(inventory.firstEmpty() != -1){
-                    inventory.addItem(item.getItemStack());
-                    EffectUtil.spawnParticle(location.clone().add(new Vector(0.5, 1, 0.5)));
-                    EffectUtil.playEffect(item.getLocation());
-                    item.remove();
-                    EffectUtil.playSound(location, Sound.ENTITY_ITEM_PICKUP);
-                }else{
-                    ChunkHopperUtil.collectRemainingGroundItems(inventory, item, this);
-                }
-                ChunkHopperUtil.sellItems(inventory, this);
+        if(!chunk.isLoaded()){
+            return;
+        }
+        Block block = location.getBlock();
+        if(!block.getType().equals(Material.HOPPER)){
+            ChunkHopperManager.removeChunkHopper(location);
+            return;
+        }
+        ChunkHopperUtil.autoKillMobs(chunk, this);
+        Hopper hopper = (Hopper) block.getState();
+        Inventory inventory = hopper.getInventory();
+        for(Item item : ChunkHopperUtil.getGroundItems(chunk, filteredItems)){
+            if(inventory.firstEmpty() != -1){
+                inventory.addItem(item.getItemStack());
+                EffectUtil.spawnParticle(location.clone().add(new Vector(0.5, 1, 0.5)));
+                EffectUtil.playEffect(item.getLocation());
+                item.remove();
+                EffectUtil.playSound(location, Sound.ENTITY_ITEM_PICKUP);
+            }else{
+                ChunkHopperUtil.collectRemainingGroundItems(inventory, item, this);
             }
         }
+        ChunkHopperUtil.sellItems(inventory, this);
     }
 
-    public void reload(){
+    public void updatePersistentValue(){
         Hopper hopper = (Hopper) location.getBlock().getState();
         String filteredItemsString = filteredItems.isEmpty() ? "NONE" : ItemSerializer.serializeItemStacks(filteredItems);
         String filteredMobsString = filteredMobs.isEmpty() ? "NONE" : ItemSerializer.serializeItemStacks(filteredMobs);
