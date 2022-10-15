@@ -30,7 +30,7 @@ public class ChunkHopperFile extends CustomConfiguration{
     public void save(boolean configSave){
         String locationString = ItemSerializer.serializeLocation(chunkHopper.getLocation());
         if(!configSave){
-            chunkHopper.reload();
+            chunkHopper.updatePersistentValue();
         }
         configuration.set(locationString + ".totalEarnings", chunkHopper.getTotalEarnings());
         configuration.set(locationString + ".autoSell", chunkHopper.isAutoSell());
