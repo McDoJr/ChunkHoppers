@@ -100,7 +100,7 @@ public class ChunkHopperMenu extends Menu {
                 itemStack = new ItemStack(itemStack.getType());
                 chunkHopper.getFilteredMobs().remove(itemStack);
             }
-            chunkHopper.reload();
+            chunkHopper.updatePersistentValue();
             StringUtil.sendMessage(player, ConfigValues.getMessage("removed-filtered-message"));
             openInventory();
             return;
@@ -128,7 +128,7 @@ public class ChunkHopperMenu extends Menu {
             plugin.getEconomy().depositPlayer(player, chunkHopper.getTotalEarnings());
             StringUtil.sendMessage(player, ConfigValues.getMessage("withdraw-message").replace("%amount%", String.valueOf(chunkHopper.getTotalEarnings())));
             chunkHopper.setTotalEarnings(0.0D);
-            chunkHopper.reload();
+            chunkHopper.updatePersistentValue();
             player.closeInventory();
             return;
         }
