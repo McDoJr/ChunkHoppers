@@ -27,6 +27,7 @@ public class ConfigValues {
     private static boolean allowedCustomItems;
     private static int perTransferAmount;
     private static boolean essentialsWorth;
+    private static int hopperLimit;
 
     public static void loadConfigValues(){
         messages = new HashMap<>();
@@ -45,11 +46,16 @@ public class ConfigValues {
         allowedCustomItems = (boolean)getValue("allow-custom-items");
         perTransferAmount = (int) getValue("per-transfer-amount");
         essentialsWorth = (boolean) getValue("essentials-worth");
+        hopperLimit = (int) getValue("hopper-limit");
         allowedItems = plugin.getConfig().getStringList("allowed-items").stream().map(s -> new ItemStack(Material.valueOf(s))).collect(Collectors.toList());
     }
 
     public static boolean isEssentialsWorth() {
         return essentialsWorth;
+    }
+
+    public static int getHopperLimit() {
+        return hopperLimit;
     }
 
     public static String getMessage(String paramString){
