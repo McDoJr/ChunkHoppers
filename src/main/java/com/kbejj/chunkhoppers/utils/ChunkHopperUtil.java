@@ -1,7 +1,6 @@
 package com.kbejj.chunkhoppers.utils;
 
 import com.earth2me.essentials.Essentials;
-import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.Worth;
 import com.kbejj.chunkhoppers.ChunkHoppers;
 import com.kbejj.chunkhoppers.base.ChunkHopper;
@@ -10,7 +9,10 @@ import net.brcdev.shopgui.ShopGuiPlugin;
 import net.brcdev.shopgui.ShopGuiPlusApi;
 import net.brcdev.shopgui.shop.item.ShopItem;
 import org.bukkit.*;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Item;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
@@ -57,13 +59,13 @@ public class ChunkHopperUtil {
         List<Item> items =  Arrays.stream(chunk.getEntities()).filter(Entity::isOnGround).filter(entity -> !entity.isDead()).filter(entity -> entity instanceof Item)
                 .map(entity -> (Item) entity).collect(Collectors.toList());
         if(!filteredItems.isEmpty()){
-            items = items.stream().filter(item -> {
-                ItemStack itemStack = item.getItemStack().clone();
-                itemStack.setAmount(1);
-                return filteredItems.contains(itemStack);
-            }).collect(Collectors.toList());
+            items.removeIf(item -> !isSimilar(item, filteredItems));
         }
         return items;
+    }
+
+    private static boolean isSimilar(Item item, List<ItemStack> filteredItems){
+        return filteredItems.stream().anyMatch(itemStack -> itemStack.isSimilar(item.getItemStack()));
     }
 
     public static void autoKillMobs(Chunk chunk, ChunkHopper chunkHopper){
@@ -120,7 +122,8 @@ public class ChunkHopperUtil {
         for(ItemStack itemStack : getContents(inventory)){
             ShopItem shopItem = shop.getShopManager().findShopItemByItemStack(itemStack, true);
             if(shopItem != null){
-                totalSold += shopItem.getSellPrice() * itemStack.getAmount();
+                totalSold += (chunkHopper.getOfflinePlayer().isOnline() ?
+                        shopItem.getSellPrice(chunkHopper.getOfflinePlayer().getPlayer()) : shopItem.getSellPrice()) * itemStack.getAmount();
                 inventory.remove(itemStack);
             }
         }
