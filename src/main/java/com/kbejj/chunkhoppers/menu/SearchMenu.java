@@ -68,13 +68,13 @@ public class SearchMenu extends Menu {
                     return;
                 }
                 chunkHopper.addFilteredMob(itemStack);
-                chunkHopper.reload();
+                chunkHopper.updatePersistentValue();
             }else{
                 if(chunkHopper.getFilteredItems().contains(itemStack)){
                     return;
                 }
                 chunkHopper.addFilteredItem(itemStack);
-                chunkHopper.reload();
+                chunkHopper.updatePersistentValue();
             }
             StringUtil.sendMessage(player, ConfigValues.getMessage("filtered-message"));
             openInventory();
