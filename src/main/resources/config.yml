@@ -43,6 +43,9 @@ pickup-sound: true
 # The amount of items per chunk hopper transfer. (set to 0 to disable it)
 per-transfer-amount: 0
 pickup-particles: true
+# What defines here will be the chunk hopper limit in the server per player (Except for OP Players),
+# even if they have chunkhoppers.limit.21, if the server limit is 20, then they still cant go beyond that
+hopper-limit: 20
 displayname: "&b&lChunk Hopper"
 lore:
   - "&7Collects ground items"
