@@ -15,7 +15,6 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.util.Vector;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -24,36 +23,6 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class ChunkHopperUtil {
-
-    public static void collectRemainingGroundItems(Inventory inventory, Item item, ChunkHopper chunkHopper){
-        Location location = chunkHopper.getLocation();
-        for(int i=0; i<5; i++){
-            ItemStack inventoryStack = inventory.getItem(i);
-            ItemStack groundStack = item.getItemStack();
-            int inventoryStackAmount = inventoryStack.getAmount();
-            int groundStackAmount = groundStack.getAmount();
-            int maxStackSize = inventoryStack.getMaxStackSize();
-            if(inventoryStack.isSimilar(groundStack)){
-                if(inventoryStackAmount + groundStackAmount <= maxStackSize){
-                    inventoryStack.setAmount(inventoryStackAmount + groundStackAmount);
-                    EffectUtil.playEffect(item.getLocation());
-                    item.remove();
-                    EffectUtil.spawnParticle(location.clone().add(new Vector(0.5, 1, 0.5)));
-                    EffectUtil.playSound(location, Sound.ENTITY_ITEM_PICKUP);
-                }else{
-                    if(inventoryStackAmount < maxStackSize){
-                        inventoryStack.setAmount(maxStackSize);
-                        groundStack.setAmount(groundStackAmount - (maxStackSize - inventoryStackAmount));
-                        EffectUtil.playEffect(item.getLocation());
-                        item.remove();
-                        location.getWorld().dropItemNaturally(item.getLocation(), groundStack);
-                        EffectUtil.spawnParticle(location.clone().add(new Vector(0.5, 1, 0.5)));
-                        EffectUtil.playSound(location, Sound.ENTITY_ITEM_PICKUP);
-                    }
-                }
-            }
-        }
-    }
 
     public static List<Item> getGroundItems(Chunk chunk, List<ItemStack> filteredItems){
         List<Item> items =  Arrays.stream(chunk.getEntities()).filter(Entity::isOnGround).filter(entity -> !entity.isDead()).filter(entity -> entity instanceof Item)

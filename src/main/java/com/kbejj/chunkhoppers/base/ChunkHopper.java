@@ -14,6 +14,7 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.util.Vector;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public class ChunkHopper {
@@ -52,14 +53,15 @@ public class ChunkHopper {
         Hopper hopper = (Hopper) block.getState();
         Inventory inventory = hopper.getInventory();
         for(Item item : ChunkHopperUtil.getGroundItems(chunk, filteredItems)){
-            if(inventory.firstEmpty() != -1){
-                inventory.addItem(item.getItemStack());
+            int amount = item.getItemStack().getAmount();
+            Map<Integer, ItemStack> drops = inventory.addItem(item.getItemStack());
+            if(drops.isEmpty() || item.getItemStack().getAmount() < amount){
+                if(drops.isEmpty()){
+                    item.remove();
+                }
                 EffectUtil.spawnParticle(location.clone().add(new Vector(0.5, 1, 0.5)));
                 EffectUtil.playEffect(item.getLocation());
-                item.remove();
                 EffectUtil.playSound(location, Sound.ENTITY_ITEM_PICKUP);
-            }else{
-                ChunkHopperUtil.collectRemainingGroundItems(inventory, item, this);
             }
         }
         ChunkHopperUtil.sellItems(inventory, this);
